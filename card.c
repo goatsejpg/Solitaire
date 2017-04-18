@@ -3,10 +3,12 @@
 
 #include "sdl_funcs.h"
 #include "card.h"
+#include "core.h"
 
 struct Card CARDS[53];
 SDL_Texture* CARD_TEXTURES[53];
 SDL_Texture* CARD_BACK;
+SDL_Rect     CARD_SIZE;
 
 void define_cards() {
 	CARDS[0].Suit = null;
@@ -26,17 +28,16 @@ void define_cards() {
 	for (char i=40; i<=52; ++i) CARDS[i].Suit = SPADE;
 
 	for (char i = 1; i <= 52; ++i) {
-		if (CARDS[i].Suit == DIAMOND ||
-			CARDS[i].Suit == HEART) {
-			CARDS[i].Color == RED;
+		if (CARDS[i].Suit == DIAMOND | CARDS[i].Suit == HEART) {
+			CARDS[i].Color = RED;
 		} else {
-			CARDS[i].Color == BLACK;
+			CARDS[i].Color = BLACK;
 		}
 	}
 }
 
 int can_be_placed_onto_tableau(struct Card* a, struct Card* b) {
-	return (a->Color != b->Color) && (a->Number == b->Number - 1) ?
+	return ((a->Color != b->Color) && (a->Number == b->Number - 1)) ?
 		1 : 0;
 }
 
@@ -75,13 +76,20 @@ void map_card_to_filename(struct Card card, char dest[]) {
 int load_card_textures() {
 	char filename[] = "bmp/000.bmp";
 	int success = 1, temp;
+
 	for (unsigned char i = 1; i <= 52; ++i) {
 		map_card_to_filename(CARDS[i], filename);
 		CARD_TEXTURES[i] = load_texture(filename, &temp);
+		CARDS[i].Texture = CARD_TEXTURES[i];
 		if (temp == 0) success = 0;
 	}
+	SDL_QueryTexture(CARD_TEXTURES[1], NULL, NULL,
+		&CARD_SIZE.w, &CARD_SIZE.h);
 
 	CARD_BACK = load_texture("bmp/back.bmp", &temp);
+	if (temp == 0) success = 0;
+
+	background = load_texture("bmp/background.bmp", &temp);
 	if (temp == 0) success = 0;
 	return success;
 }

@@ -21,11 +21,11 @@ int main(int argc, char** argv) {
 	}
 
 	srand(time(NULL));
-	init_solitaire();
-	shuffle_deck();
 
 	main_loop();
 
 	delete_card_textures();
+	quit();
+
 	return 0;
 }
