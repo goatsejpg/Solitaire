@@ -18,9 +18,12 @@ extern unsigned char TABLEAUS_SIZE[7];
 
 extern SDL_Rect deck_hitbox;
 extern SDL_Rect drawn_hitbox;
+extern SDL_Rect foundation_hitbox[4];
 
 extern char tableau_picked_up;
 extern char drawn_picked_up;
+extern char foundation_picked_up;
+extern char which_foundation_picked_up;
 extern struct Vec2 tableau_picked_up_root;
 extern SDL_Rect picked_up_hitbox;
 
@@ -34,14 +37,18 @@ int check_win();
 void draw_card();
 // Returns 8 if dragged card is not on a tableau / can't be legally placed
 unsigned char check_tableau_dragged_to(struct Card* card);
+// Returns 5 if dragged card is not on a tableau / can't be legally placed
+unsigned char check_foundation_dragged_to(struct Card* card);
 void append_tableau_onto_tableau(unsigned char tableau, struct Vec2 root);
-void append_card_onto_tableau(unsigned char tableau, struct Card* card);
+struct Card* append_card_onto_tableau(unsigned char tableau, struct Card* card);
+struct Card* append_card_onto_foundation(unsigned char foundation, struct Card* card);
 void uncover_top_hidden_cards();
+
+void win_animation();
 
 void restart_game();
 
 enum SECTION_CLICKED {__DECK, __TABLEAU, __FOUNDATION, __DRAWN, __NULL};
 enum SECTION_CLICKED check_section_clicked();
-extern unsigned char __FOUNDATION_CLICKED;
 
 #endif // SOLITAIRE_H
